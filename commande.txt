@@ -1,0 +1,21 @@
+# 1. Mise à jour et installation des dépendances système
+sudo apt update -y
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+# 2. Création du dossier pour les clés GPG et téléchargement de la clé Docker
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# 3. Ajout du dépôt officiel Docker aux sources APT
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 4. Installation de Docker et de ses composants (moteur, CLI, Compose)
+sudo apt update -y
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# 5. Configuration des permissions (permet d'utiliser docker sans 'sudo')
+sudo usermod -aG docker $USER
